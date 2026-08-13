@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Buy — spaceV</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<canvas id="space-bg"></canvas>
+
+<nav class="gnav">
+  <a href="index.html" class="logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.2 21 L12 16.6 L5.8 21 L8 13.5 L2 9 L9.5 9 Z" fill="#fff"/>
+    </svg>
+    <span class="logo-text">spaceV</span>
+  </a>
+  <div class="links">
+    <a href="store.html">Store</a>
+    <a href="buy.html?id=nova-pro">Nova Pro</a>
+    <a href="buy.html?id=aero">Aero</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="icons">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2 L3 6 v14 a2 2 0 0 0 2 2 h14 a2 2 0 0 0 2-2 V6 l-3-4 Z"/><path d="M16 10 a4 4 0 0 1-8 0"/></svg>
+    <button class="hamburger" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mnav">
+  <a href="store.html">Store</a>
+  <a href="buy.html?id=nova-pro">Nova Pro</a>
+  <a href="buy.html?id=aero">Aero</a>
+  <a href="about.html">About</a>
+</div>
+
+<div class="subnav">
+  <span class="t-body-strong" id="subnav-title">Buy</span>
+</div>
+
+<div id="product-switch" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:18px 24px 0;"></div>
+
+<section id="buy-hero" style="padding:48px 24px 60px; text-align:center; position:relative; z-index:1;">
+  <h1 class="t-display-lg" id="p-name" data-reveal="words" style="margin-bottom:8px;"></h1>
+  <p class="t-lead" id="p-tagline" data-reveal="words" style="margin-bottom:36px;"></p>
+
+  <div id="phone-mount" style="margin-bottom:44px;"></div>
+
+  <div style="max-width:560px; margin:0 auto; text-align:left;">
+    <div class="t-caption-strong" style="margin-bottom:10px;">Finish</div>
+    <div id="finish-row" style="display:flex; gap:10px; margin-bottom:28px;"></div>
+
+    <div class="t-caption-strong" style="margin-bottom:10px;">Storage</div>
+    <div id="storage-row" style="display:grid; gap:12px; margin-bottom:28px;"></div>
+
+    <div class="t-caption-strong" style="margin-bottom:10px;">Highlights</div>
+    <ul id="specs-list"></ul>
+  </div>
+</section>
+
+<div style="height:80px;"></div>
+
+<div class="sticky-bar">
+  <div>
+    <div class="t-caption" id="bar-name" style="color:var(--ink-muted-48);"></div>
+    <div class="t-body" id="bar-price"></div>
+  </div>
+  <button class="btn-primary">Add to Bag</button>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <h4>Shop</h4>
+      <ul><li><a class="t-dense-link" href="store.html">Store</a></li>
+      <li><a class="t-dense-link" href="buy.html?id=nova-pro">Nova Pro</a></li>
+      <li><a class="t-dense-link" href="buy.html?id=nova">Nova</a></li>
+      <li><a class="t-dense-link" href="buy.html?id=aero">Aero</a></li></ul>
+    </div>
+    <div>
+      <h4>About</h4>
+      <ul><li><a class="t-dense-link" href="about.html">Company</a></li>
+      <li><a class="t-dense-link" href="about.html">Sustainability</a></li>
+      <li><a class="t-dense-link" href="about.html">Newsroom</a></li></ul>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <ul><li><a class="t-dense-link" href="about.html">Contact Us</a></li>
+      <li><a class="t-dense-link" href="about.html">Repairs</a></li>
+      <li><a class="t-dense-link" href="about.html">Warranty</a></li></ul>
+    </div>
+  </div>
+  <div class="legal">
+    <p class="t-fine" style="color:var(--ink-muted-48);">Copyright © 2026 spaceV Inc. All rights reserved. Concept storefront for demonstration purposes.</p>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/main.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || sessionStorage.getItem('spaceV_selected') || 'nova-pro';
+  let product = getProductById(id);
+  let storageIdx = 0;
+  let finish = product.finishes[0];
+
+  const hero = document.getElementById('buy-hero');
+  const switcher = document.getElementById('product-switch');
+  switcher.innerHTML = PRODUCTS.map(p => `
+    <button data-id="${p.id}" class="${p.id===product.id ? 'btn-dark' : 'btn-pearl'}">
+      ${p.name.replace('spaceV ','')}
+    </button>`).join('');
+  switcher.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    sessionStorage.setItem('spaceV_selected', b.dataset.id);
+    location.href = `buy.html?id=${b.dataset.id}`;
+  });
+
+  function render() {
+    const dark = product.tile === 'dark';
+    hero.style.background = dark ? 'rgba(28,28,30,.72)' : 'rgba(255,255,255,.85)';
+    hero.style.color = dark ? 'var(--on-dark)' : 'var(--ink)';
+
+    document.getElementById('subnav-title').textContent = `Buy ${product.name}`;
+    document.getElementById('p-name').textContent = product.name;
+    document.getElementById('p-tagline').textContent = product.tagline;
+    document.getElementById('p-tagline').style.color = dark ? 'var(--body-muted)' : 'var(--ink-muted-80)';
+
+    mountPhone('phone-mount', finish, { tilt: true });
+
+    const finishRow = document.getElementById('finish-row');
+    finishRow.innerHTML = product.finishes.map(c => `
+      <button class="swatch ${c===finish?'selected':''}" style="background:${c}" data-c="${c}"></button>
+    `).join('');
+    finishRow.onclick = (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      finish = b.dataset.c;
+      render();
+    };
+
+    const storageRow = document.getElementById('storage-row');
+    storageRow.style.gridTemplateColumns = `repeat(${product.storage.length}, 1fr)`;
+    storageRow.innerHTML = product.storage.map((s,i) => `
+      <button class="storage-chip ${i===storageIdx?'selected':''}" data-i="${i}">
+        <div class="t-caption-strong">${s.label}</div>
+        <div class="t-fine" style="color:var(--ink-muted-48); margin-top:2px;">${s.delta ? '+$'+s.delta : 'Included'}</div>
+      </button>
+    `).join('');
+    storageRow.onclick = (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      storageIdx = Number(b.dataset.i);
+      render();
+    };
+
+    document.getElementById('specs-list').innerHTML = product.specs.map(s => `
+      <li class="t-body" style="color:${dark?'var(--body-muted)':'var(--ink-muted-80)'}; display:flex; align-items:center; gap:8px; padding:6px 0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${product.accent}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        ${s}
+      </li>
+    `).join('');
+
+    const total = product.price + product.storage[storageIdx].delta;
+    document.getElementById('bar-name').textContent = product.name;
+    document.getElementById('bar-price').textContent = `From $${total}`;
+  }
+
+  render();
+</script>
+</body>
+</html>
